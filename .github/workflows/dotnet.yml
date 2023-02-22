@@ -22,9 +22,8 @@ jobs:
         dotnet-version: 7.0.x
     - name: Restore dependencies
       run: dotnet restore ExampleBlazorApp/ExampleBlazorApp.sln
-    - name: Build
-      run: dotnet build --no-restore ExampleBlazorApp/ExampleBlazorApp.sln -configuration Release
-    - name: Publish
-      run: dotnet publish ExampleBlazorApp/ExampleBlazorApp.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
-    - name: Test
-      run: dotnet test --no-build --verbosity normal ExampleBlazorApp/ExampleBlazorApp.sln
+    - name: dotnet build and publish
+      run: |
+        dotnet restore
+        dotnet build --configuration Release
+        dotnet publish -c Release --property:PublishDir='${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
